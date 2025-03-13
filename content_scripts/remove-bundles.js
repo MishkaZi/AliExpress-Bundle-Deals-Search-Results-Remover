@@ -94,13 +94,21 @@
             removedThisSession += removedCount;
 
             // Notify background script to update the counter
+            // DEBUG: Log before sending message
+            console.log('Sending incrementCounter message with count:', removedCount);
+            
             browser.runtime.sendMessage({
                 action: 'incrementCounter',
                 count: removedCount
             }).then(response => {
+                // Debug logging - enhanced to troubleshoot communication
+                console.log('Background response received:', response);
+                
                 // Log success
                 if (response && response.success) {
                     console.log(`Bundle counter updated, total: ${response.newCount}`);
+                } else {
+                    console.warn('Received unexpected response format:', response);
                 }
             }).catch(error => {
                 console.error('Failed to update bundle counter:', error);
